@@ -1,0 +1,31 @@
+# Package Files
+*.jar
+*.war
+*.ear
+
+# IntelliJ project files
+*.iml
+*.ipr
+*.iws
+.idea
+
+# Eclipse project files
+.classpath
+.project
+.settings
+
+# Build outputs
+*.class
+target
+dependency-reduced-pom.xml
+
+# OS files
+.DS_Store
+
+.aws.config
+tags
+*.retry
+
+*/bin/*
+*.log
+.editorconfig
