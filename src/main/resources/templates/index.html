@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Github2Resume</title>
+	    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+		<meta content="IE=9" http-equiv="X-UA-Compatible"></meta>
+		<meta name="author" content="Pavlo Velychko (pavlo.velychko[at]gmail.com)" />
+		<link rel="icon" type="image/png" href="/images/favicon.ico"></link>
+		<link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+		<link rel="stylesheet" href="/css/styles.css"></link>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'></link>
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript">
+			$(function() { //shorthand document.ready function
+		   		$('#form').on('submit', function(e) {
+					console.info("I'm here!!!")
+					window.location.href = '/' + document.getElementById('username').value;
+					return false;
+				});
+			})
+		</script>
+	</head>
+<body>	
+	<div class="container">
+		<div class="row text-center" style="min-height: 256px;">
+			<div class="col-md-6 col-md-offset-3 well">
+				<!-- Header -->
+				<div class="text-center">
+					<a class="navbar-brand" href="/" style="float: none; vertical-align: middle;">
+						<img class="logo-2x" src="/images/favicon.ico" />
+						Github2Resume
+					</a>
+				</div>
+				<br/>
+				<h2>Generate CV from your Github account!</h2>
+				<br/>
+				<form id="form" method="GET">
+					<label for="username">Github username:</label>
+					<input id="username" type="text"></input>
+					<input type="submit" value="Go"></input>
+				</form>
+				<br/>
+				<div class="footer text-center" style="margin-top: 24px; padding: 24px 12px 0;">
+					<ul class="list-inline">
+						<li>Site design and development by Pavlo Velychko, 2016</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
