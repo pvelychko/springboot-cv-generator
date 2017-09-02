@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Github2Resume</title>
+	    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+		<meta content="IE=9" http-equiv="X-UA-Compatible"></meta>
+		<meta name="author" content="Pavlo Velychko (pavlo.velychko[at]gmail.com)" />
+		<link rel="icon" type="image/png" href="/images/favicon.ico"></link>
+		<link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+		<link rel="stylesheet" href="/css/styles.css"></link>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'></link>
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/handlebars.min.js"></script>
+		<script type="text/javascript" src="/js/mustache.min.js"></script>
+		<script type="text/javascript" src="/js/longToDate.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				Handlebars.registerHelper('eachkeys', function(context, options) {
+					var fn = options.fn, inverse = options.inverse;
+					var ret = "";
+					
+					var empty = true;
+					for (key in context) { empty = false; break; }
+					
+					if (!empty) {
+					  for (key in context) {
+					      ret = ret + fn({ 'key': key, 'value': context[key]});
+					  }
+					} else {
+					  ret = inverse(this);
+					}
+					return ret;
+				});
+
+				var username = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+				$.ajax({
+	        		url: "/rest/" + username,
+	        		dataType: "json"
+	    		}).then(function(data) {
+	    			var mainTemplate = $('#mainTemplate').html();
+					var mainRendered = Mustache.render(mainTemplate, data);
+					$('#mainTarget').html(mainRendered);
+					
+				    var languagesTemplate = $("#languagesTemplate").html();
+				    var languagesRendered = Handlebars.compile(languagesTemplate);
+				    $('#languagesTarget').html(languagesRendered({'data': data.statistics}));
+				    longToDate();
+	    		})
+			})
+		</script>
+	</head>
+<body>
+	<div class="container">
+		<div id="mainTarget">Loading...</div>
+	</div>
+	<script id="mainTemplate" type="x-tmpl-mustache">
+		<!-- Header -->
+		<nav class="navbar navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">
+						<img class="logo-2x" src="/images/favicon.ico" />
+						Github2Resume
+					</a>
+				</div>		
+			</div>
+		</nav>
+		<div class="row text-center">
+			<div class="col-md-8 col-md-offset-2">
+				<img src="{{user.avatarUrl}}" class="avatar img-thumbnail" />
+				<h2>{{user.name}}</h2>
+				<ul class="list-inline">
+					<!-- Location -->
+					{{#user.location}}
+						<li>
+							<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+							<a href="http://maps.google.com/?q={{user.location}}">{{user.location}}</a>
+						</li>
+					{{/user.location}}
+					<!-- Blog -->
+					{{#user.blog}}
+						<li>
+							<span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+							<a href="{{user.blog}}">{{user.blog}}</a>
+						</li>
+					{{/user.blog}}
+		
+					<!-- E-mail -->
+					{{#user.email}}
+						<li>
+							<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+							<a href="mailto:{{user.email}}">{{user.email}}</a>
+						</li>
+					{{/user.email}}
+				</ul>
+						
+				<ul class="list-inline">
+					<!-- Company -->
+					{{#user.company}}
+						<li>
+							<span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+							{{user.company}}
+						</li>
+					{{/user.company}}
+							
+					<!-- Since -->
+					<li>
+						<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+						<span class="longDate">{{user.createdAt}}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3 aside">
+				<h4>Repositories</h4>
+				<ul class="list-inline">
+				   	<li>
+				   		<b>Public:</b> 
+				   		<span>{{user.publicRepos}}</span>
+				   	</li>
+				</ul>
+				<ul class="list-inline">
+					<li>
+						<b>Private:</b> 
+						<span>{{user.totalPrivateRepos}}</span>
+					</li>
+				</ul>
+					
+				<h4>Languages</h4>
+				<ul id="languagesTarget" class="list-inline"></ul>
+			</div>
+				
+			<div class="col-md-9">
+				<h4 class="text-center">Repositories list</h4>
+				{{#repositories}}
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<strong>{{name}}</strong>
+						</div>
+						<div class="panel-body">
+							{{description}}
+						</div>
+						<div class="panel-footer">
+							<ul class="list-inline">
+								<li>
+							 		<span class="text-muted">
+							  			<em>{{language}}</em>
+							  		</span>
+					  			</li>
+					  		</ul>
+					  		<ul class="list-inline pull-right">
+								<li>
+									<b>Forks:</b>
+									<span class="badge">{{forks}}</span>
+								</li>
+								<li>
+									<b>Watchers:</b>
+									<span class="badge">{{watchers}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				{{/repositories}}
+			</div>
+		</div>
+		<!-- Footer -->
+		<div class="footer">
+			<div class="container">
+				<div class="text-center">
+					<ul class="list-inline">
+						<li>Site design and development by Pavlo Velychko, 2016</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script id="languagesTemplate" type="text/x-handlebars-template">
+		{{#eachkeys data.languageToPercent}}
+			<li>
+				<b>{{this.key}}</b>
+			</li>
+			<li>
+				{{this.value}}%
+			</li>
+			<hr style="width: {{this.value}}%;" />
+		{{/eachkeys}}
+	</script>
+</body>
+</html>
