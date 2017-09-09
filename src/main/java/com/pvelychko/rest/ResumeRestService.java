@@ -41,7 +41,7 @@ public class ResumeRestService {
 			throw new ResourceNotFoundException();
 		}
 
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<>(user, HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/{username}/repositories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -56,7 +56,7 @@ public class ResumeRestService {
 			throw new ResourceNotFoundException();
 		}
 		
-		return new ResponseEntity<Collection<Repository>>(repositories, HttpStatus.OK);
+		return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -65,7 +65,7 @@ public class ResumeRestService {
 		RepositoryService repositoryService = new RepositoryService(client);
 		
 		User user = null;
-		Collection<Repository> repositories = null;
+		Collection<Repository> repositories;
 
 		try {
 			user = userService.getUser(username);
@@ -77,6 +77,6 @@ public class ResumeRestService {
 		
 		Resume resume = new Resume(user, repositories, new Statistics(repositories));
 		
-		return new ResponseEntity<Resume>(resume, HttpStatus.OK);
+		return new ResponseEntity<>(resume, HttpStatus.OK);
     }
 }
