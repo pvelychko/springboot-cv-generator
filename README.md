@@ -12,3 +12,9 @@ The application should start with the following command:
 ```
 mvn spring-boot:run
 ```
+
+## Screenshots
+
+![picture](screenshot_1.png)
+
+![picture](screenshot_2.png)
